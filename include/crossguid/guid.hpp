@@ -32,74 +32,83 @@ THE SOFTWARE.
 #include <utility>
 #include <iomanip>
 
-#define BEGIN_XG_NAMESPACE namespace xg {
-#define END_XG_NAMESPACE }
-
-BEGIN_XG_NAMESPACE
-
-// Class to represent a GUID/UUID. Each instance acts as a wrapper around a
-// 16 byte value that can be passed around by value. It also supports
-// conversion to string (via the stream operator <<) and conversion from a
-// string via constructor.
-class Guid
+namespace xg
 {
-public:
-	explicit Guid(const std::array<unsigned char, 16> &bytes);
-	explicit Guid(std::array<unsigned char, 16> &&bytes);
+    // Class to represent a GUID/UUID. Each instance acts as a wrapper around a
+    // 16 byte value that can be passed around by value. It also supports
+    // conversion to string (via the stream operator <<) and conversion from a
+    // string via constructor.
+    class Guid
+    {
+    public:
+        explicit Guid(const std::array<unsigned char, 16>& bytes);
 
-	explicit Guid(std::string_view fromString);
-	Guid();
+        explicit Guid(std::array<unsigned char, 16>&& bytes);
 
-	Guid(const Guid &other) = default;
-	Guid &operator=(const Guid &other) = default;
-	Guid(Guid &&other) = default;
-	Guid &operator=(Guid &&other) = default;
+        explicit Guid(std::string_view fromString);
 
-	bool operator==(const Guid &other) const;
-	bool operator!=(const Guid &other) const;
+        Guid();
 
-	std::string str() const;
-	operator std::string() const;
-	const std::array<unsigned char, 16>& bytes() const;
-	void swap(Guid &other);
-	bool isValid() const;
+        Guid(const Guid& other) = default;
 
-private:
-	void zeroify();
+        Guid& operator=(const Guid& other) = default;
 
-	// actual data
-	std::array<unsigned char, 16> _bytes;
+        Guid(Guid&& other) = default;
 
-	// make the << operator a friend so it can access _bytes
-	friend std::ostream &operator<<(std::ostream &s, const Guid &guid);
-	friend bool operator<(const Guid &lhs, const Guid &rhs);
-};
+        Guid& operator=(Guid&& other) = default;
 
-Guid newGuid();
+        bool operator==(const Guid& other) const;
 
-namespace details
-{
-	template <typename...> struct hash;
+        bool operator!=(const Guid& other) const;
 
-	template<typename T>
-	struct hash<T> : public std::hash<T>
-	{
-		using std::hash<T>::hash;
-	};
+        std::string str() const;
+
+        operator std::string() const;
+
+        const std::array<unsigned char, 16>& bytes() const;
+
+        void swap(Guid& other);
+
+        bool isValid() const;
+
+    private:
+        void zeroify();
+
+        // actual data
+        std::array<unsigned char, 16> _bytes;
+
+        // make the << operator a friend so it can access _bytes
+        friend std::ostream& operator<<(std::ostream& s, const Guid& guid);
+
+        friend bool operator<(const Guid& lhs, const Guid& rhs);
+    };
+
+    Guid newGuid();
+
+    namespace details
+    {
+        template<typename...>
+        struct hash;
+
+        template<typename T>
+        struct hash<T> : public std::hash<T>
+        {
+            using std::hash<T>::hash;
+        };
 
 
-	template <typename T, typename... Rest>
-	struct hash<T, Rest...>
-	{
-		inline std::size_t operator()(const T& v, const Rest&... rest) {
-			std::size_t seed = hash<Rest...>{}(rest...);
-			seed ^= hash<T>{}(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-			return seed;
-		}
-	};
+        template<typename T, typename... Rest>
+        struct hash<T, Rest...>
+        {
+            inline std::size_t operator()(const T& v, const Rest& ... rest)
+            {
+                std::size_t seed = hash<Rest...>{}(rest...);
+                seed ^= hash<T>{}(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+                return seed;
+            }
+        };
+    }
 }
-
-END_XG_NAMESPACE
 
 namespace std
 {

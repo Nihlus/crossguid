@@ -19,7 +19,11 @@ add_library(${PROJECT_NAME})
 add_library(crossguid::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 target_sources(${PROJECT_NAME}
 	PRIVATE
-		${CMAKE_CURRENT_SOURCE_DIR}/src/guid.cpp
+		src/guid.cpp
+		src/platform/android.cpp
+		src/platform/cfuuid.cpp
+		src/platform/libuuid.cpp
+		src/platform/windows.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
