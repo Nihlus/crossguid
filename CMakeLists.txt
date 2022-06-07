@@ -1,17 +1,28 @@
 cmake_minimum_required(VERSION 3.5.1)
-project(crossguid VERSION 0.2.3)
+project(crossguid
+	LANGUAGES CXX
+	VERSION 0.2.3
+)
 
+# Configure CMake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
-
 option(CROSSGUID_TESTS "Build test runner" ON)
 
+# Configure language settings
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Configure target
 add_library(${PROJECT_NAME})
 target_sources(${PROJECT_NAME}
 	PRIVATE
 		${CMAKE_CURRENT_SOURCE_DIR}/src/guid.cpp
+)
+
+target_include_directories(${PROJECT_NAME}
+	PUBLIC
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+		$<INSTALL_INTERFACE:include>
 )
 
 set_property(TARGET ${PROJECT_NAME}
@@ -19,10 +30,7 @@ set_property(TARGET ${PROJECT_NAME}
 		POSITION_INDEPENDENT_CODE ON
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>)
-
+# Configure dependencies
 if(WIN32)
     target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_WINDOWS)
 elseif(APPLE)
