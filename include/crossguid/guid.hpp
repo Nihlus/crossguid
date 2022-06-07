@@ -24,11 +24,6 @@ THE SOFTWARE.
 
 #pragma once
 
-#ifdef GUID_ANDROID
-#include <thread>
-#include <jni.h>
-#endif
-
 #include <functional>
 #include <iostream>
 #include <array>
@@ -54,7 +49,7 @@ public:
 
 	explicit Guid(std::string_view fromString);
 	Guid();
-	
+
 	Guid(const Guid &other) = default;
 	Guid &operator=(const Guid &other) = default;
 	Guid(Guid &&other) = default;
@@ -82,32 +77,11 @@ private:
 
 Guid newGuid();
 
-#ifdef GUID_ANDROID
-struct AndroidGuidInfo
-{
-	static AndroidGuidInfo fromJniEnv(JNIEnv *env);
-
-	JNIEnv *env;
-	jclass uuidClass;
-	jmethodID newGuidMethod;
-	jmethodID mostSignificantBitsMethod;
-	jmethodID leastSignificantBitsMethod;
-	std::thread::id initThreadId;
-};
-
-extern AndroidGuidInfo androidInfo;
-
-void initJni(JNIEnv *env);
-
-// overloading for multi-threaded calls
-Guid newGuid(JNIEnv *env);
-#endif
-
 namespace details
 {
 	template <typename...> struct hash;
 
-	template<typename T> 
+	template<typename T>
 	struct hash<T> : public std::hash<T>
 	{
 		using std::hash<T>::hash;

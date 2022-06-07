@@ -38,6 +38,7 @@ THE SOFTWARE.
 #endif
 
 #ifdef GUID_ANDROID
+#include "internal/guid-android.hpp"
 #include <jni.h>
 #include <cassert>
 #endif
