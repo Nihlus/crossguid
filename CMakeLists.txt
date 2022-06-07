@@ -46,8 +46,7 @@ else()
         message(FATAL_ERROR
             "You might need to run 'sudo apt-get install uuid-dev' or similar")
     endif()
-    target_include_directories(${PROJECT_NAME} PRIVATE ${LIBUUID_INCLUDE_DIR})
-    target_link_libraries(${PROJECT_NAME} ${LIBUUID_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} LibUUID::UUID)
     target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_LIBUUID)
 endif()
 
