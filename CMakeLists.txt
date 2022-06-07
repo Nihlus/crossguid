@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(crossguid
-	LANGUAGES CXX
+	LANGUAGES C CXX
 	VERSION 0.2.3
 )
 
@@ -58,6 +58,5 @@ set_target_properties(${PROJECT_NAME}
 )
 
 if (CROSSGUID_TESTS)
-    add_executable(crossguid-test test/TestMain.cpp test/Test.cpp)
-    target_link_libraries(crossguid-test crossguid)
+    add_subdirectory(test)
 endif()
