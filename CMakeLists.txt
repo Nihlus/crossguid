@@ -7,6 +7,7 @@ project(crossguid
 # Configure CMake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 option(CROSSGUID_TESTS "Build test runner" ON)
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
 # Configure language settings
 set(CMAKE_CXX_STANDARD 17)
@@ -14,7 +15,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Configure target
-add_library(${PROJECT_NAME} SHARED)
+add_library(${PROJECT_NAME})
 add_library(crossguid::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 target_sources(${PROJECT_NAME}
 	PRIVATE
