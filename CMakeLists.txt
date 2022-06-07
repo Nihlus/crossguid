@@ -5,7 +5,7 @@ project(crossguid
 )
 
 # Configure CMake
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 option(CROSSGUID_TESTS "Build test runner" ON)
 
 # Configure language settings
