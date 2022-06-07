@@ -50,15 +50,6 @@ else()
     target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_LIBUUID)
 endif()
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(WARNINGS "-Werror" "-Wall")
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(WARNINGS "-Werror" "-Wall")
-elseif(MSVC)
-    set(WARNINGS "/WX" "/W4")
-endif()
-target_compile_options(${PROJECT_NAME} PRIVATE ${WARNINGS})
-
 # Configure versioning information
 set_target_properties(${PROJECT_NAME}
 	PROPERTIES
