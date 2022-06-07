@@ -9,10 +9,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 option(CROSSGUID_TESTS "Build test runner" ON)
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
+include(GenerateExportHeader)
+
 # Configure language settings
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
+set(CMAKE_C_VISIBILITY_PRESET hidden)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 # Configure target
 add_library(${PROJECT_NAME})
@@ -32,6 +37,7 @@ target_include_directories(${PROJECT_NAME}
         ${PROJECT_BINARY_DIR}/include
 	INTERFACE
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+		$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
 		$<INSTALL_INTERFACE:include>
 )
 
@@ -65,6 +71,11 @@ set_target_properties(${PROJECT_NAME}
 	PROPERTIES
 	VERSION ${PROJECT_VERSION}
 	SOVERSION ${PROJECT_VERSION_MAJOR}
+)
+
+# Configure generated code
+generate_export_header(${PROJECT_NAME}
+	EXPORT_FILE_NAME include/crossguid/${PROJECT_NAME}-export.h
 )
 
 if (CROSSGUID_TESTS)

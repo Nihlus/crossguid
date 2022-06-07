@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 #pragma once
 
+#include "crossguid/crossguid-export.h"
+
 #include <functional>
 #include <iostream>
 #include <array>
@@ -38,7 +40,7 @@ namespace xg
     // 16 byte value that can be passed around by value. It also supports
     // conversion to string (via the stream operator <<) and conversion from a
     // string via constructor.
-    class Guid
+    class CROSSGUID_EXPORT Guid
     {
     public:
         explicit Guid(const std::array<unsigned char, 16>& bytes);
@@ -78,12 +80,12 @@ namespace xg
         std::array<unsigned char, 16> _bytes;
 
         // make the << operator a friend so it can access _bytes
-        friend std::ostream& operator<<(std::ostream& s, const Guid& guid);
+        CROSSGUID_EXPORT friend std::ostream& operator<<(std::ostream& s, const Guid& guid);
 
-        friend bool operator<(const Guid& lhs, const Guid& rhs);
+        CROSSGUID_EXPORT friend bool operator<(const Guid& lhs, const Guid& rhs);
     };
 
-    Guid newGuid();
+    CROSSGUID_EXPORT Guid newGuid();
 
     namespace details
     {
@@ -95,7 +97,6 @@ namespace xg
         {
             using std::hash<T>::hash;
         };
-
 
         template<typename T, typename... Rest>
         struct hash<T, Rest...>
