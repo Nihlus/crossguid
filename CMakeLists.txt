@@ -35,7 +35,10 @@ if(WIN32)
     target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_WINDOWS)
 elseif(APPLE)
     find_library(CFLIB CoreFoundation)
-    target_link_libraries(${PROJECT_NAME} ${CFLIB})
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+            ${CFLIB}
+    )
     target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_CFUUID)
 elseif(ANDROID)
     # GUID_ANDROID is used in the headers, so make PUBLIC
@@ -46,7 +49,10 @@ else()
         message(FATAL_ERROR
             "You might need to run 'sudo apt-get install uuid-dev' or similar")
     endif()
-    target_link_libraries(${PROJECT_NAME} LibUUID::UUID)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+            LibUUID::UUID
+    )
     target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_LIBUUID)
 endif()
 
