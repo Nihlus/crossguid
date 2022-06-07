@@ -11,6 +11,7 @@ option(CROSSGUID_TESTS "Build test runner" ON)
 # Configure language settings
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Configure target
 add_library(${PROJECT_NAME} SHARED)
@@ -23,11 +24,6 @@ target_include_directories(${PROJECT_NAME}
 	PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		$<INSTALL_INTERFACE:include>
-)
-
-set_property(TARGET ${PROJECT_NAME}
-	PROPERTY
-		POSITION_INDEPENDENT_CODE ON
 )
 
 # Configure dependencies
