@@ -7,7 +7,6 @@ option(CROSSGUID_TESTS "Build test runner" ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_DEBUG_POSTFIX "-dgb")
 
 # Set the build type if not set
 if(NOT CMAKE_BUILD_TYPE)
