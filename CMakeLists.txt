@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.1)
-project(CrossGuid VERSION 0.2.3)
+project(crossguid VERSION 0.2.3)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 
@@ -14,30 +14,39 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-add_library(crossguid ${CMAKE_CURRENT_SOURCE_DIR}/src/guid.cpp)
-set_property(TARGET crossguid PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_include_directories(crossguid PUBLIC
+add_library(${PROJECT_NAME})
+target_sources(${PROJECT_NAME}
+	PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/src/guid.cpp
+)
+
+set_property(TARGET ${PROJECT_NAME}
+	PROPERTY
+		POSITION_INDEPENDENT_CODE ON
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 
 if(WIN32)
-    target_compile_definitions(crossguid PRIVATE GUID_WINDOWS)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_WINDOWS)
 elseif(APPLE)
     find_library(CFLIB CoreFoundation)
-    target_link_libraries(crossguid ${CFLIB})
-    target_compile_definitions(crossguid PRIVATE GUID_CFUUID)
+    target_link_libraries(${PROJECT_NAME} ${CFLIB})
+    target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_CFUUID)
 elseif(ANDROID)
     # GUID_ANDROID is used in the headers, so make PUBLIC
-    target_compile_definitions(crossguid PUBLIC GUID_ANDROID)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC GUID_ANDROID)
 else()
     find_package(LibUUID REQUIRED)
     if (NOT LIBUUID_FOUND)
         message(FATAL_ERROR
             "You might need to run 'sudo apt-get install uuid-dev' or similar")
     endif()
-    target_include_directories(crossguid PRIVATE ${LIBUUID_INCLUDE_DIR})
-    target_link_libraries(crossguid ${LIBUUID_LIBRARY})
-    target_compile_definitions(crossguid PRIVATE GUID_LIBUUID)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${LIBUUID_INCLUDE_DIR})
+    target_link_libraries(${PROJECT_NAME} ${LIBUUID_LIBRARY})
+    target_compile_definitions(${PROJECT_NAME} PRIVATE GUID_LIBUUID)
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -47,9 +56,9 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 elseif(MSVC)
     set(WARNINGS "/WX" "/W4")
 endif()
-target_compile_options(crossguid PRIVATE ${WARNINGS})
+target_compile_options(${PROJECT_NAME} PRIVATE ${WARNINGS})
 
-set_target_properties(crossguid
+set_target_properties(${PROJECT_NAME}
 					  PROPERTIES
 					  VERSION ${PROJECT_VERSION}
 					  SOVERSION ${PROJECT_VERSION_MAJOR}
@@ -68,7 +77,7 @@ if (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
 	set(CROSSGUID_ADDITIONAL_FILES_INSTALL_DIR "${CMAKE_INSTALL_DATADIR}/crossguid")
 
 	# Install target
-	install(TARGETS crossguid EXPORT crossguidTargets
+	install(TARGETS ${PROJECT_NAME} EXPORT crossguidTargets
 		RUNTIME       DESTINATION ${CROSSGUID_RUNTIME_INSTALL_DIR}
 		LIBRARY       DESTINATION ${CROSSGUID_LIBRARY_INSTALL_DIR}
 		ARCHIVE       DESTINATION ${CROSSGUID_ARCHIVE_INSTALL_DIR}
