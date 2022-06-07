@@ -8,11 +8,6 @@ option(CROSSGUID_TESTS "Build test runner" ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Set the build type if not set
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release")
-endif()
-
 add_library(${PROJECT_NAME})
 target_sources(${PROJECT_NAME}
 	PRIVATE
